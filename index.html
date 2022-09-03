@@ -1,0 +1,163 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            body{
+                margin: 0;
+                padding: 0;
+            }
+            
+            header{
+                position: sticky;
+                top: 0;
+                height: 50px;
+                width: 80%;
+                border: 1px solid black;
+                margin: auto;
+                font-family: sans-serif;
+                font-weight: 100;
+                margin-bottom: 10px;
+                display: flex;
+                /* justify-content: center; */
+                align-items:center;
+
+            }
+            header a{
+                text-decoration: none;
+                color: white;
+                background-color: black;
+                padding: 7px 10px;
+                margin: 10px;
+            }
+            .batches{
+                width: 80%;
+                margin: auto;
+                display: flex;
+                border: 1px black;
+            }
+            .main{
+                min-height: auto;;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;    
+                flex-direction: column;
+                font-family: sans-serif;
+            }
+            .main .box{
+                height: auto;
+                width: 450px;
+                padding: 20px 10px;
+                box-shadow: 0 0 10px rgb(0,0,0,0.2);
+                /* border: 1px solid black; */
+            }
+            .main .box form{
+                display: grid;
+                grid-template-columns: repeat(1,1fr);
+            }
+            .main .box form .inputBx{
+                padding: 10px 10px;
+                display: grid;
+                grid-template-columns: repeat(1,1fr);
+            }
+            .main .box form .inputBx button,
+            .main .box form .inputBx input{
+                padding: 5px 10px;
+            }
+        </style>
+    </head>
+    <body>
+        
+    <header>
+        <a href="index.html">Home</a>
+        <a href="student.html">Students</a>
+        <a href="trash.html">Trahs</a>
+    </header>
+    <div class="batches"></div>
+        <div class="main">
+            <h1>Add Student</h1>
+            <div class="box">
+                <form action="">
+                    <div class="inputBx">
+                        <label for="">Name</label>
+                        <input required="" type="text" id="name">
+                    </div>
+                    <div class="inputBx">
+                        <label for="">Course</label>
+                        <input required="" type="text" id="course">
+                    </div>
+                    <div class="inputBx">
+                        <label for="">Unit</label>
+                        <input required="" type="text" id="unit">
+                    </div>
+                    <div class="inputBx">
+                        <label for="">Image</label>
+                        <input required="" type="text" id="image">
+                    </div>
+                    <div class="inputBx">
+                        <label for="">Batch</label>
+                        <input required="" type="text"  id="batch">
+                    </div>
+                    <div class="inputBx">
+                        <button>Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+
+<script>
+
+    var s_arr = JSON.parse(localStorage.getItem('students')) || [];
+
+    function load_batchesData(){
+        document.querySelector(".batches").innerHTML = "";
+        var arr = {};
+        for(let i = 0; i< s_arr.length; i++){
+            var ele = s_arr[i].batch;
+            if(arr[ele] == undefined){
+                arr[ele] = 1;
+            }else{
+                arr[ele]++;
+            }
+        }
+
+        for(let key in arr){
+            var h3 = document.createElement('h3');
+            h3.innerText = key+" - "+ arr[key]+" "+"  | "
+            document.querySelector(".batches").append(h3)
+        }
+    }load_batchesData()
+
+
+        function student_data(n,c,u,i,b){
+            this.name = n;
+            this.course = c;
+            this.unit = u;
+            this.image = i;
+            this.batch = b;
+        }
+        document.querySelector("form").addEventListener("submit",function(e){
+            e.preventDefault();
+            var name = this.name.value;
+            var course = this.course.value;
+            var unit = this.unit.value;
+            var image = this.image.value;
+            var batch = this.batch.value;
+            
+            let details = new student_data(name,course,unit,image,batch);
+            s_arr.push(details)
+            localStorage.setItem('students',JSON.stringify(s_arr));
+            document.querySelector('form').reset();
+            load_batchesData();
+        })
+
+        // var u_d = student_data();
+</script>
+</html>
+
+    <!-- name, course, unit, image and batch. -->

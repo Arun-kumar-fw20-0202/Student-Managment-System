@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        header{
+            height: 50px;
+            width: 80%;
+            border: 1px solid black;
+            margin: auto;
+            font-family: sans-serif;
+            font-weight: 100;
+            margin-bottom: 10px;
+            display: flex;
+            /* justify-content: center; */
+            align-items:center;
+        }
+        header a{
+            text-decoration: none;
+            color: white;
+            background-color: black;
+            padding: 7px 10px;
+            margin: 10px;
+        }
+        .batches{
+            width: 80%;
+            margin: auto;
+            display: flex;
+            border: 1px black;
+        }
+        .main{
+            margin: 0;
+            padding: 0;
+            width: 80%;
+            margin: auto;
+            min-height: 100vh;
+        }
+        .main .container{
+            width: 100%;
+            height: auto;
+            /* border: 1px solid black; */
+        }
+        .main .container .thead{
+            display: grid;
+            justify-content: center;
+            grid-template-columns: repeat(6,1fr);
+            padding: 15px 10px;
+            background-color: royalblue;
+        }
+        .main .container .thead span{
+            /* text-align: center; */
+            color: white;
+            /* border: 1px solid black; */
+        }
+        
+        .main .container .details{
+            width: 100%;
+            height: auto;
+            /* border: 1px solid black; */
+        }
+        
+        .main .container .details .tbody{
+            display: grid;
+            justify-content: center;
+            grid-template-columns: repeat(6,1fr);
+            padding: 7px 10px;
+            margin-top: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+            /* background-color: royalblue; */
+            /* border: 1px solid black; */
+        }
+        .main .container .details .tbody span{
+            color: black;
+            display: flex;
+            align-items: center;
+            /* justify-content: center; */
+            /* border: 1px solid black; */
+        }
+        .main .container .details .tbody span img{
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid black;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html">Home</a>
+        <a href="student.html">Students</a>
+        <a href="trash.html">Trahs</a>
+    </header>
+    <div class="batches"></div>
+    <div class="main">
+        <div class="container">
+            <div class="thead">
+                <span>Profile</span>
+                <span>Name</span>
+                <span>Course</span>
+                <span>Unit</span>
+                <span>Batch</span>
+                <span>Action</span>
+            </div>
+            <div class="details">
+                <!-- Append data here -->
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var stu_arr = JSON.parse(localStorage.getItem('students')) || [];
+    var trash_st = JSON.parse(localStorage.getItem('trash')) || [];
+
+    var arr = {}
+    for(let i = 0; i< stu_arr.length; i++){
+        var ele = stu_arr[i].batch;
+        if(arr[ele] == undefined){
+            arr[ele] = 1;
+        }else{
+            arr[ele]++
+        }
+    }
+
+    for(let key in arr){
+        var h3 = document.createElement('h3');
+        h3.innerText = key+" - "+ arr[key]+" "+"  | "
+        document.querySelector(".batches").append(h3)
+    }
+
+
+
+
+
+    stu_arr.forEach(function(ele,i){
+
+        var tbody = document.createElement('div');
+        tbody.setAttribute('class','tbody');
+
+        var sp = document.createElement('span');
+
+        var image = document.createElement('img');
+        image.setAttribute("src",ele.image);
+
+        
+        var sp1 = document.createElement('span');
+        sp1.innerText = ele.name;
+        
+        var sp2 = document.createElement('span');
+        sp2.innerText = ele.course;
+        
+        var sp3 = document.createElement('span');
+        sp3.innerText = ele.unit;
+        
+        var sp4 = document.createElement('span');
+        sp4.innerText = ele.batch
+        
+        var sp5 = document.createElement('span');
+        sp5.innerText = "Remove";
+
+        sp5.addEventListener("click",function(){
+            delStu(ele,i)
+        })
+        
+        sp.append(image);
+        tbody.append(sp,sp1,sp2,sp3,sp4,sp5);
+        document.querySelector(".details").append(tbody);
+    })
+
+    function delStu(ele,i){
+        event.target.parentNode.remove();
+        stu_arr.splice(i,1);
+        trash_st.push(ele)
+
+        localStorage.setItem('trash',JSON.stringify(trash_st));
+        localStorage.setItem('students',JSON.stringify(stu_arr))
+    }
+
+</script>
+</html>
